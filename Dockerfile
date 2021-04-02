@@ -133,6 +133,6 @@ RUN apk --update --no-cache add -t build-dependencies \
 COPY rootfs /
 
 EXPOSE 8000 514 514/udp
-VOLUME [ "/data" ]
+VOLUME [ "/data" ] 
 
 ENTRYPOINT [ "/init" ]
