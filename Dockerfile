@@ -132,6 +132,7 @@ RUN apk add libffi-dev
 RUN apk add openssl
 RUN apk add gcc musl-dev openssl-dev cargo
 RUN pip3 install python-miio
+RUN pip3 install apcaccess
 
 COPY rootfs /
 
