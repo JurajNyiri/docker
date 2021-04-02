@@ -6,73 +6,74 @@ LABEL maintainer="CrazyMax"
 
 COPY --from=yasu / /
 RUN apk --update --no-cache add \
-    busybox-extras \
-    acl \
-    bash \
-    bind-tools \
-    binutils \
-    ca-certificates \
-    coreutils \
-    curl \
-    fping \
-    git \
-    graphviz \
-    imagemagick \
-    ipmitool \
-    iputils \
-    mariadb-client \
-    monitoring-plugins \
-    mtr \
-    net-snmp \
-    net-snmp-tools \
-    nginx \
-    nmap \
-    openssl \
-    perl \
-    php7 \
-    php7-cli \
-    php7-ctype \
-    php7-curl \
-    php7-dom \
-    php7-fileinfo \
-    php7-fpm \
-    php7-gd \
-    php7-json \
-    php7-ldap \
-    php7-mbstring \
-    php7-mcrypt \
-    php7-memcached \
-    php7-mysqlnd \
-    php7-opcache \
-    php7-openssl \
-    php7-pdo \
-    php7-pdo_mysql \
-    php7-pear \
-    php7-phar \
-    php7-posix \
-    php7-session \
-    php7-simplexml \
-    php7-snmp \
-    php7-sockets \
-    php7-tokenizer \
-    php7-xml \
-    php7-zip \
-    python3 \
-    py3-pip \
-    rrdtool \
-    runit \
-    shadow \
-    syslog-ng=3.30.1-r0 \
-    ttf-dejavu \
-    tzdata \
-    util-linux \
-    whois \
+  busybox-extras \
+  acl \
+  bash \
+  bind-tools \
+  binutils \
+  ca-certificates \
+  coreutils \
+  curl \
+  fping \
+  gcc \
+  git \
+  graphviz \
+  imagemagick \
+  ipmitool \
+  iputils \
+  mariadb-client \
+  monitoring-plugins \
+  mtr \
+  net-snmp \
+  net-snmp-tools \
+  nginx \
+  nmap \
+  openssl \
+  perl \
+  php7 \
+  php7-cli \
+  php7-ctype \
+  php7-curl \
+  php7-dom \
+  php7-fileinfo \
+  php7-fpm \
+  php7-gd \
+  php7-json \
+  php7-ldap \
+  php7-mbstring \
+  php7-mcrypt \
+  php7-memcached \
+  php7-mysqlnd \
+  php7-opcache \
+  php7-openssl \
+  php7-pdo \
+  php7-pdo_mysql \
+  php7-pear \
+  php7-phar \
+  php7-posix \
+  php7-session \
+  php7-simplexml \
+  php7-snmp \
+  php7-sockets \
+  php7-tokenizer \
+  php7-xml \
+  php7-zip \
+  python3 \
+  py3-pip \
+  rrdtool \
+  runit \
+  shadow \
+  syslog-ng=3.30.1-r0 \
+  ttf-dejavu \
+  tzdata \
+  util-linux \
+  whois \
   && apk --update --no-cache add -t build-dependencies \
-    build-base \
-    make \
-    mariadb-dev \
-    musl-dev \
-    python3-dev \
+  build-base \
+  make \
+  mariadb-dev \
+  musl-dev \
+  python3-dev \
   && pip3 install --upgrade pip \
   && pip3 install python-memcached mysqlclient --upgrade \
   && curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer \
@@ -81,9 +82,9 @@ RUN apk --update --no-cache add \
   && echo "/usr/sbin/fping -6 \$@" > /usr/sbin/fping6 \
   && chmod +x /usr/sbin/fping6 \
   && chmod u+s,g+s \
-    /bin/ping \
-    /bin/ping6 \
-    /usr/lib/monitoring-plugins/check_icmp \
+  /bin/ping \
+  /bin/ping6 \
+  /usr/lib/monitoring-plugins/check_icmp \
   && setcap cap_net_raw+ep /usr/bin/nmap \
   && setcap cap_net_raw+ep /usr/sbin/fping \
   && setcap cap_net_raw+ep /usr/sbin/fping6 \
@@ -105,12 +106,13 @@ RUN addgroup -g ${PGID} librenms \
 WORKDIR ${LIBRENMS_PATH}
 ARG LIBRENMS_VERSION
 RUN apk --update --no-cache add -t build-dependencies \
-    build-base \
-    linux-headers \
-    musl-dev \
-    python3-dev \
+  build-base \
+  linux-headers \
+  musl-dev \
+  python3-dev \
   && git clone --branch ${LIBRENMS_VERSION} https://github.com/librenms/librenms.git . \
   && pip3 install -r requirements.txt --upgrade \
+  && pip3 install python-miio --upgrade \
   && COMPOSER_CACHE_DIR="/tmp" composer install --no-dev --no-interaction --no-ansi \
   && mkdir config.d \
   && cp config.php.default config.php \
@@ -122,11 +124,11 @@ RUN apk --update --no-cache add -t build-dependencies \
   && chown -R nobody.nogroup ${LIBRENMS_PATH} \
   && apk del build-dependencies \
   && rm -rf .git \
-    html/plugins/Test \
-    html/plugins/Weathermap/.git \
-    html/plugins/Weathermap/configs \
-    /tmp/* \
-    /var/cache/apk/*
+  html/plugins/Test \
+  html/plugins/Weathermap/.git \
+  html/plugins/Weathermap/configs \
+  /tmp/* \
+  /var/cache/apk/*
 
 COPY rootfs /
 
