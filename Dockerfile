@@ -15,7 +15,6 @@ RUN apk --update --no-cache add \
   coreutils \
   curl \
   fping \
-  gcc \
   git \
   graphviz \
   imagemagick \
@@ -77,7 +76,6 @@ RUN apk --update --no-cache add \
   && pip3 install --upgrade pip \
   && pip3 install python-memcached mysqlclient --upgrade \
   && curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer \
-  && apk del build-dependencies \
   && rm -rf /var/cache/apk/* /var/www/* /tmp/* \
   && echo "/usr/sbin/fping -6 \$@" > /usr/sbin/fping6 \
   && chmod +x /usr/sbin/fping6 \
@@ -112,7 +110,6 @@ RUN apk --update --no-cache add -t build-dependencies \
   python3-dev \
   && git clone --branch ${LIBRENMS_VERSION} https://github.com/librenms/librenms.git . \
   && pip3 install -r requirements.txt --upgrade \
-  && pip3 install python-miio --upgrade \
   && COMPOSER_CACHE_DIR="/tmp" composer install --no-dev --no-interaction --no-ansi \
   && mkdir config.d \
   && cp config.php.default config.php \
@@ -122,13 +119,19 @@ RUN apk --update --no-cache add -t build-dependencies \
   && echo "foreach (glob(\"${LIBRENMS_PATH}/config.d/*.php\") as \$filename) include \$filename;" >> config.php \
   && git clone https://github.com/librenms-plugins/Weathermap.git ./html/plugins/Weathermap \
   && chown -R nobody.nogroup ${LIBRENMS_PATH} \
-  && apk del build-dependencies \
   && rm -rf .git \
   html/plugins/Test \
   html/plugins/Weathermap/.git \
   html/plugins/Weathermap/configs \
   /tmp/* \
   /var/cache/apk/*
+
+RUN apk add build-base
+RUN apk add python3-dev
+RUN apk add libffi-dev
+RUN apk add openssl
+RUN apk add gcc musl-dev openssl-dev cargo
+RUN pip3 install python-miio
 
 COPY rootfs /
 
